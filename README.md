@@ -1,14 +1,49 @@
-# infinitus-interview
-Interview Assignment for Infinitus
+# Infinitus Interview Assignment
+This take-home project was a containerized restaurant analyzer service/API.
 
-# Steps taken
+See the included PDF for details on the requirements.
+
+# Usage (Docker)
+From the root directory, build the image with:
+```Bash
+docker image build -t restaurant_analyzer
+```
+You can then run the local restaurant analyzer service from a container as:
+```Bash
+docker container run --name RA_test -d -p 5000:5000 restaurant_analyzer
+```
+The two endpoints should now be up and running on your localhost. You can easily
+check the `/health` endpoint in browser, but the two endpoints can be tested
+more easily using something like python `requests` or `curl`. See Python REPL
+below:
+```Python
+>>> import requests
+>>> r = requests.get('http://127.0.0.1:5000/health')
+>>> print(r.status_code, r.text)
+200 <p>Service is up and running!</p>
+
+>>> data = {'message': 'OK, your order is a large pizza and garlic bread.'}
+>>> x = requests.post('http://127.0.0.1:5000/detect_intent', data)
+>>> print(x.status_code, x.text)
+200 ConfirmItem
+
+>>> invalid_req = requests.post('http://127.0.0.1:5000/detect_intent')
+>>> print(invalid_req.status_code, invalid_req.text)
+422 'message' parameter not found, please supply.
+```
+Lastly, you can see the app logs with the standard Docker command:
+```Bash
+docker container logs $container_name
+```
+
+# Steps Taken to Build
 1. Created initial Flask `app.py` shell, confirmed local "Hello World" on 5000 works.
-2. Install Docker (on Windwos unfortunately...).
-3. Create Dockerfile that installs Python, Flask, exposes port 5000, and runs
-    the `app.py` file.
+2. Install Docker (on Windwos unfortunately so this took more time...).
+3. Create Dockerfile to build our image that installs Python, Flask, copies
+    files, exposes port 5000, and runs the `app.py` file.
 4. Confirm "Hello World" works once again on our Dockerized file with these steps:
 * Build the image:
-```
+```Bash
 docker image build -t 'restaurant_analyzer' .
 ```
 
@@ -29,20 +64,15 @@ docker image build -t 'restaurant_analyzer' .
 172.17.0.1 - - [01/Apr/2022 23:20:32] "GET / HTTP/1.1" 200 -
 ```
 
-5. Create basic functions and endpoints.
-6. Test with a simple POST request using the python `requests` module:
-```Python
-import requests
-x = requests.post('http://127.0.0.1:5000/detect_intent/message=Ready+in+30')
-```
-or, better:
+5. Create the jaccard_similarity functions and the two service endpoints.
+6. Test all functions, here's an example with the `/detect_intent` endpoint:
 ```Python
 import requests
 data = {'message': 'Ready in 30'}
 x = requests.post('http://127.0.0.1:5000/detect_intent', data=data)
 ```
 
-7. Start off with unit tests in `test_app.py`.
+7. Formalize these as unit tests in `test_app.py`.
 
 8. Create a simple shell of the git `pre-commit` with running `python app/test_app.py`.
 

@@ -4,7 +4,7 @@ import json
 
 
 # PAST_CONVERSATIONS is a list of dicts {"utterance": <msg>, "intent": <intent>}
-with open("./app/prior_conversations.json") as json_file:
+with open("prior_conversations.json") as json_file:
     PAST_CONVERSATIONS = json.load(json_file)
     PAST_CONVERSATIONS = PAST_CONVERSATIONS["chatLog"]
 

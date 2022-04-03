@@ -4,7 +4,6 @@ import app
 
 
 class TestJaccardSimilarity(unittest.TestCase):
-
     def test_jaccard_similarity(self):
         test_cases = [
             [
