@@ -1,0 +1,48 @@
+{
+    "chatLog": [
+        {
+            "utterance": "Hi, Mario's what can I get you?",
+            "intent": "Greeting"
+        },
+        {
+            "utterance": "I'd like to order a pizza for pickup please.",
+            "intent": "HowCanIHelp"
+        },
+        {
+            "utterance": "OK, what would you like to order?",
+            "intent": "ReadyToReceiveOrder"
+        },
+        {
+            "utterance": "I'd like a medium supreme pizza.",
+            "intent": "OrderItem"
+        },
+        {
+            "utterance": "Anything more?",
+            "intent": "AnyMoreItems"
+        },
+        {
+            "utterance": "Also, a garlic bread.",
+            "intent": "OrderItem"
+        },
+        {
+            "utterance": "Is that all?",
+            "intent": "AnyMoreItems"
+        },
+        {
+            "utterance": "Yes, that is all thanks.",
+            "intent": "EndOfOrder"
+        },
+        {
+            "utterance": "OK, your order is a medium supreme and a garlic bread.",
+            "intent": "ConfirmItem"
+        },
+        {
+            "utterance": "Should be ready in about 30 minutes.",
+            "intent": "DurationBeforePickupAnswer"
+        },
+        {
+            "utterance": "Thank you, goodbye.",
+            "intent": "Goodbye"
+        }
+    ]
+}
