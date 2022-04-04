@@ -9,9 +9,6 @@ with open("prior_conversations.json") as json_file:
     PAST_CONVERSATIONS = PAST_CONVERSATIONS["chatLog"]
 
 
-app = Flask(__name__)
-
-
 def jaccard_similarity(s1: str, s2: str) -> float:
     # first remove punctuation, namely commas and end-of-sentence characters
     punc = '!?.,;'
@@ -30,27 +27,36 @@ def jaccard_similarity(s1: str, s2: str) -> float:
     return float(intersection) / excl_union
 
 
-@app.route('/health', methods=['GET'])
-def health():
-    return "<p>Service is up and running!</p>"
+def create_app(test_config=None):
+    app = Flask(__name__)
 
+    # could add more options here for later
+    if test_config:
+        print("TESTING environment active...")
 
-# takes "message", returns intent
-@app.route('/detect_intent', methods=['POST'])
-def detect_intent() -> float:
-    message = request.form.get('message')
-    if not message:
-        return Response("'message' parameter not found, please supply.", status=422)
-    jaccard_vals = []
-    for chat_log in PAST_CONVERSATIONS:
-        j_val = jaccard_similarity(message, chat_log['utterance'])
-        jaccard_vals.append((j_val, chat_log['intent']))
-    # after populating a list of `(jaccard_vals, intent)``, sort by the jaccard
-    # value and return the intent corresponding to the largest one
-    jaccard_vals.sort()
-    return jaccard_vals[-1][1]
+    @app.route('/health', methods=['GET'])
+    def health():
+        return "<p>Service is up and running!</p>"
+
+    # takes "message", returns intent
+    @app.route('/detect_intent', methods=['POST'])
+    def detect_intent() -> float:
+        message = request.form.get('message')
+        if not message:
+            return Response("'message' parameter not found, please supply.", status=422)
+        jaccard_vals = []
+        for chat_log in PAST_CONVERSATIONS:
+            j_val = jaccard_similarity(message, chat_log['utterance'])
+            jaccard_vals.append((j_val, chat_log['intent']))
+        # after populating a list of `(jaccard_vals, intent)``, sort by the jaccard
+        # value and return the intent corresponding to the largest one
+        jaccard_vals.sort()
+        return jaccard_vals[-1][1]
+    
+    return app
 
 
 if __name__ == "__main__":
     # just run the app on localhost, port 5000
+    app = create_app()
     app.run(host="0.0.0.0", port=5000)
