@@ -10,7 +10,7 @@ cd app
 python test_app.py
 ec=$?
 if [[ $ec != 0 ]]; then
-	echo 'Unit tests failed! See above for more info.\n'
+	echo -e "\nUnit tests failed! See above for more info."
 	exit 1
 else
 	echo; exit 0
