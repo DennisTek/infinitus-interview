@@ -1,0 +1,17 @@
+#!/bin/sh
+###############################################################################
+# THIS IS A COPIED FILE, COPY OR MOVE IT TO `.git/hooks/` AS JUST `pre-commit`
+# TO ACTUALLY USE IT IN YOUR LOCAL REPO
+###############################################################################
+
+### UNIT TESTS
+echo "Running pre-commit unit tests..."
+cd app
+python test_app.py
+ec=$?
+if [[ $ec != 0 ]]; then
+	echo 'Unit tests failed! See above for more info.\n'
+	exit 1
+else
+	echo; exit 0
+fi
